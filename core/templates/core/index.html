@@ -17,54 +17,71 @@
         {% endif %}
     </nav>
     <div class="bg-gray-200 grid grid-cols-7 gap-4" style="height: calc(100vh - 4.7rem)">
-        <div class="col-span-2 border-r border-gray-300 shadow-md bg-white">
-            <div class="flex justify-center gap-4 items-center h-28 border-b border-gray-300">
-                <p class="text-2xl">
-                    <i class="las la-2xl la-home"></i>
-                </p>
-                <p class="text-sm font-semibold">
-                    {{ user.first_name }} {{ user.last_name }}
-                </p>
-            </div>
+    <div class="col-span-2 border-r border-gray-300 shadow-md bg-white">
+        <div class="flex justify-center gap-4 items-center h-28 border-b border-gray-300">
+            <p class="text-2xl">
+                <i class="las la-2xl la-home"></i>
+            </p>
+            <p class="text-sm font-semibold">
+                {{ user.first_name }} {{ user.last_name }}
+            </p>
         </div>
-        <div class="col-span-4 m-4 border border-gray-300 rounded-sm shadow-md bg-white">
-            <div class="flex gap-4 items-center rounded-md m-5 px-4 py-2 border border-gray-300 shadow-md">
-                <p class="text-2xl">
-                    <i class="las la-2xl la-globe"></i>
-                </p>
-                <p class="text-xl font-semibold text-green-600">Tu dispositivo esta en linea</p>
-            </div>
-            <div class="flex justify-end m-5">
-                <div class="flex-1"></div>
-                <div class="flex-1 border border-gray-300 rounded-sm shadow-md bg-white px-4 py-2">
-                    <div class="flex items-center gap-2">
-                        <i class="las text-blue-400 text-xs la-lg la-key"></i>
-                        <p class="text-xs font-semibold text-blue-600">
-                            Red privada
-                        </p>
+    </div>
+    <div class="col-span-4 m-4 border border-gray-300 rounded-sm shadow-md bg-white">
+        <div class="flex gap-4 items-center rounded-md m-5 px-4 py-2 border border-gray-300 shadow-md">
+            <p class="text-2xl">
+                <i class="las la-2xl la-globe"></i>
+            </p>
+            <p class="text-xl font-semibold text-green-600">Tu dispositivo esta en linea</p>
+        </div>
+        <div class="flex justify-end m-5">
+            <div class="flex-1"></div>
+            <div class="flex-1 border border-gray-300 rounded-sm shadow-md bg-white px-4 py-2">
+                <div class="flex items-center gap-2">
+                    <i class="las text-blue-400 text-xs la-lg la-key"></i>
+                    <p class="text-xs font-semibold text-blue-600">
+                        Red privada
+                    </p>
+                </div>
+                {% if request.GET.msg == 'ok' %}
+                    <div class="my-2">
+                        <div class="bg-green-600 bg-opacity-20 rounded-sm p-2">
+                            <p class="text-green-600 text-center font-semibold text-sm mx-2">Reiniciado</p>
+                        </div>
                     </div>
-                    <div class="my-3">
-                        <p class="text-2xl font-medium text-blue-800 uppercase">
-                            {% if user.modem %}
-                                {{ user.modem.name }}
-                            {% else %}
-                                generico
-                            {% endif %}
-                        </p>
+                {% endif %}
+                {% if request.GET.msg == 'error' %}
+                    <div class="my-2">
+                        <div class="bg-red-600 bg-opacity-20 rounded-sm p-2">
+                            <p class="text-red-600 text-center font-semibold text-sm mx-2">Ha ocurrido un error</p>
+                        </div>
                     </div>
-                    <div class="my-3">
-                        <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">
-                            <i class="las text-sm la-lg la-random"></i>
-                            <span class="font-semibold text-sm">Itermintencia</span>
-                        </button>
-                    </div>
-                    <div class="my-3">
+                {% endif %}
+                <div class="my-3">
+                    <p class="text-2xl font-medium text-blue-800 uppercase">
+                        {% if user.modem %}
+                            {{ modem_name }}
+                        {% endif %}
+                    </p>
+                </div>
+
+{#                <div class="my-3">#}
+{#                    <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">#}
+{#                        <i class="las text-sm la-lg la-random"></i>#}
+{#                        <span class="font-semibold text-sm">Itermintencia</span>#}
+{#                    </button>#}
+{#                </div>#}
+
+                <div class="my-3">
+                    <form action="{% url 'reboot' user.modem.pk %}" method="post">
+                        {% csrf_token %}
                         <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">
                             <i class="las text-sm la-lg la-sync-alt"></i>
                             <span class="font-semibold text-sm">reiniciar modem</span>
                         </button>
-                    </div>
+                    </form>
                 </div>
+
             </div>
         </div>
     </div>
