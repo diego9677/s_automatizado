@@ -32,7 +32,11 @@
             <p class="text-2xl">
                 <i class="las la-2xl la-globe"></i>
             </p>
-            <p class="text-xl font-semibold text-green-600">Tu dispositivo esta en linea</p>
+            {% if status == 'online' %}
+                <p class="text-xl font-semibold text-green-600">Tu dispositivo esta en linea</p>
+            {% elif status == 'offline' %}
+                <p class="text-xl font-semibold text-red-600">Tu dispositivo esta sin conexción</p>
+            {% endif %}
         </div>
         <div class="flex justify-end m-5">
             <div class="flex-1"></div>
@@ -59,27 +63,31 @@
                 {% endif %}
                 <div class="my-3">
                     <p class="text-2xl font-medium text-blue-800 uppercase">
-                        {% if user.modem %}
+                        {% if modem_name %}
                             {{ modem_name }}
+                        {% else %}
+                            <p class="font-light text-red-600 text-sm">Sin conexión</p>
                         {% endif %}
                     </p>
                 </div>
 
-{#                <div class="my-3">#}
-{#                    <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">#}
-{#                        <i class="las text-sm la-lg la-random"></i>#}
-{#                        <span class="font-semibold text-sm">Itermintencia</span>#}
-{#                    </button>#}
-{#                </div>#}
+                {#                <div class="my-3">#}
+                {#                    <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">#}
+                {#                        <i class="las text-sm la-lg la-random"></i>#}
+                {#                        <span class="font-semibold text-sm">Itermintencia</span>#}
+                {#                    </button>#}
+                {#                </div>#}
 
                 <div class="my-3">
-                    <form action="{% url 'reboot' user.modem.pk %}" method="post">
-                        {% csrf_token %}
-                        <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">
-                            <i class="las text-sm la-lg la-sync-alt"></i>
-                            <span class="font-semibold text-sm">reiniciar modem</span>
-                        </button>
-                    </form>
+                    {% if status == 'online' %}
+                        <form action="{% url 'reboot' user.modem.pk %}" method="post">
+                            {% csrf_token %}
+                            <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">
+                                <i class="las text-sm la-lg la-sync-alt"></i>
+                                <span class="font-semibold text-sm">reiniciar modem</span>
+                            </button>
+                        </form>
+                    {% endif %}
                 </div>
 
             </div>

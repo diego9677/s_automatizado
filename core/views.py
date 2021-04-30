@@ -8,14 +8,18 @@ from .utils import exec_command
 @login_required
 def index(request):
     ip = request.user.modem.ip
+    context = {
+        'modem_name': None,
+        'status': 'offline'
+    }
+    if ip == '0.0.0.0':
+        return render(request, 'core/index.html', context)
     output = exec_command('user1', '12345678', ip, 'system identity print')
     array_command = output.strip().split(':')
-    context = {
-        'modem_name': None
-    }
     if len(array_command) > 0:
         name = array_command[1].strip()
         context['modem_name'] = name
+        context['status'] = 'online'
     return render(request, 'core/index.html', context)
 
 
