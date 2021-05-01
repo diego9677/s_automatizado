@@ -4,7 +4,7 @@ from .models import User
 
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={
+    ci = forms.CharField(required=True, widget=forms.TextInput(attrs={
         'class': 'w-full px-2 text-sm py-2 border border-gray-300 rounded-sm focus:outline-none focus:border-blue-600'
     }))
 
@@ -18,7 +18,7 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']
+        fields = ['ci', 'username', 'first_name', 'last_name', 'password1', 'password2']
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'w-full px-2 text-sm py-2 border border-gray-300 rounded-sm focus:outline-none focus:border-blue-600'

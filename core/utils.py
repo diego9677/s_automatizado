@@ -8,14 +8,16 @@ from paramiko import SSHClient, AutoAddPolicy
 
 
 def exec_command(username, password, ip, cmd):
-    conn = SSHClient()
-    conn.set_missing_host_key_policy(AutoAddPolicy())
-    # rsa_key = paramiko.RSAKey.from_private_key_file()
+    try:
+        conn = SSHClient()
+        conn.set_missing_host_key_policy(AutoAddPolicy())
+        # rsa_key = paramiko.RSAKey.from_private_key_file()
 
-    conn.connect(ip, username=username, password=password, port=22)
+        conn.connect(ip, username=username, password=password, port=22, timeout=5)
 
-    stdin, stdout, stderr = conn.exec_command(cmd)
-    response = stdout.read().decode("utf-8")
-    conn.close()
-    return response
-
+        stdin, stdout, stderr = conn.exec_command(cmd)
+        response = stdout.read().decode("utf-8")
+        conn.close()
+        return response
+    except Exception as e:
+        print(e)
