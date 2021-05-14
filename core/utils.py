@@ -13,7 +13,7 @@ def exec_command(username, password, ip, cmd):
         conn.set_missing_host_key_policy(AutoAddPolicy())
         # rsa_key = paramiko.RSAKey.from_private_key_file()
 
-        conn.connect(ip, username=username, password=password, port=22, timeout=5)
+        conn.connect(ip, username=username, password=password, port=22, timeout=3)
 
         stdin, stdout, stderr = conn.exec_command(cmd)
         response = stdout.read().decode("utf-8")

@@ -13,3 +13,15 @@ class Modem(models.Model):
     class Meta:
         verbose_name = 'modem'
         verbose_name_plural = 'modems'
+
+
+class Action(models.Model):
+    user = models.ForeignKey('registration.User', related_name='actions', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Creado')
+
+    def __str__(self):
+        return self.created_at
+
+    class Meta:
+        verbose_name = 'accion'
+        verbose_name_plural = 'acciones'

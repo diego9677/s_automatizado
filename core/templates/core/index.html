@@ -48,11 +48,12 @@
                         Red privada:
                     </p>
                     <p class="text-xl font-medium text-gray-500">
-                        Nombre de red
+                        {{ wifi_name }}
                     </p>
                 </div>
 
-                <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">
+                <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100"
+                        onclick="openModal()">
                     <i class="las la-lg text-blue-600 la-pencil-alt"></i>
                     <span class="font-semibold text-sm">Editar</span>
                 </button>
@@ -99,7 +100,7 @@
                 </div>
 
                 <div class="my-3">
-                    {% if status == 'online' %}
+                    {% if status == 'online' and actions < 3 %}
                         <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">
                             <i class="las text-sm la-lg la-random"></i>
                             <span class="font-semibold text-sm">lentitud / intermitencia</span>
@@ -108,7 +109,7 @@
                 </div>
 
                 <div class="my-3">
-                    {% if status == 'online' %}
+                    {% if status == 'online' and actions < 3 %}
                         <form action="{% url 'reboot' user.modem.pk %}" method="post">
                             {% csrf_token %}
                             <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">
@@ -117,7 +118,7 @@
                             </button>
                         </form>
                     {% endif %}
-                    {% if status == 'offline' %}
+                    {% if status == 'offline' or actions >= 3 %}
                         <button class="uppercase text-xs w-full text-blue-600 border py-2 px-4 rounded-md hover:bg-gray-100">
                             <i class="las la-lg la-users-cog"></i>
                             <span class="font-semibold text-sm">solicitar asisitencia técnica</span>
@@ -128,4 +129,69 @@
             </div>
         </div>
     </div>
+
+    {#    modal #}
+    <div id="modal" class="fixed inset-0 z-30 bg-gray-900 bg-opacity-75 flex items-center justify-center p-3 hidden">
+        <div class="bg-white w-1/3 h-1/3 rounded-lg overflow-hidden p-4 space-y-4">
+            <div class="flex justify-between">
+                <div class="text-xl font-medium text-gray-700">
+                    Editar wifi
+                </div>
+                <button class="text-sm p-2 bg-red-500 text-white rounded hover:bg-opacity-50" onclick="closeModal()">
+                    X
+                </button>
+            </div>
+            <div class="flex flex-col">
+                <form action="{% url 'change-wifi' user.modem.id %}" method="post">{% csrf_token %}
+                    <div class="my-2">
+                        <label for="password" class="text-sm font-semibold">Nombre de red</label>
+                        <input type="text"
+                               id="ssid"
+                               name="ssid"
+                               class="p-2 border focus:outline-none focus:border-blue-600 text-sm text-gray-700 w-full rounded-sm"
+                               value="{{ wifi_name }}"
+                        >
+                    </div>
+                    <div class="my-2">
+                        <label for="password" class="text-sm font-semibold">Nueva Contraseña</label>
+                        <input type="password"
+                               id="id_password"
+                               name="password"
+                               class="p-2 border focus:outline-none focus:border-blue-600 text-sm text-gray-700 w-full rounded-sm">
+                    </div>
+                    <div>
+                        <label for="showPassword" class="text-sm text-gray-700 font-normal">
+                            <input id="showPassword" type="checkbox" onclick="viewPass()">
+                            Mostrar Contraseña
+                        </label>
+                    </div>
+                    <div class="my-2">
+                        <button class="uppercase bg-blue-600 hover:bg-opacity-75 text-sm text-white p-2 w-full rounded-sm">
+                            guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+      function openModal() {
+        const modal = document.getElementById('modal')
+        modal.classList.remove('hidden')
+      }
+
+      function closeModal() {
+        const modal = document.getElementById('modal')
+        modal.classList.add('hidden')
+      }
+
+      function viewPass() {
+        const input = document.getElementById('id_password')
+        if (input.type === 'password') input.type = 'text'
+        else input.type = 'password'
+      }
+    </script>
 {% endblock %}

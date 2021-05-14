@@ -16,6 +16,7 @@ def signup(request):
                 user.save()
                 modem.user = user
                 modem.save()
+                messages.success(request, 'Usuario creado correctamente.')
                 return redirect(reverse_lazy('login'))
             except Modem.DoesNotExist as e:
                 messages.error(request, 'La información no es correcta.\nPor favor intenta nuevamente.')
